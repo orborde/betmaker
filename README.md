@@ -7,15 +7,17 @@ Alice thinks some proposition is 90% likely. Bob thinks it's only 70% likely. Th
 
 ```
 $ ./betmaker.py 90 70 100
-high: 90.0
-low:  70.0
-bet prob: 80.0
-high pmt: 100.0
-low pmt:  24.999999999999993
-high ev: 12.499999999999995
-low ev: 62.5
-```
+Inputs:
+  high player: 90%
+  low  player: 70%
 
-Betmaker suggests a bet as follows:
-If the proposition resolves as "No", Alice pays Bob $100.
-If "Yes", Bob pays Alice $25.
+Proposed bet:
+  NO:  high pays low  $100.00
+  YES: low  pays high $25.00
+
+  Implied probability: 80%
+
+Expected values:
+  high player expects: $12.50
+  low  player expects: $62.50
+```

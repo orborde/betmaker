@@ -17,11 +17,12 @@ pmt = float(pmt)
 high = max(A,B)
 low  = min(A,B)
 
-print('high:', high)
-print('low: ', low)
+print('Inputs:')
+print('  high player: %.0f%%' % high)
+print('  low  player: %.0f%%' % low)
+print()
 
 bet = (high+low)/2
-print('bet prob:', bet)
 
 ph = high/100
 pl = low/100
@@ -42,8 +43,12 @@ if highmax_low > pmt:
 else:
     pmt_high, pmt_low = highmax_high, highmax_low
 
-print('high pmt:', pmt_high)
-print('low pmt: ', pmt_low)
+print('Proposed bet:')
+print('  NO:  high pays low  $%.2f' % pmt_high)
+print('  YES: low  pays high $%.2f' % pmt_low)
+print()
+print('  Implied probability: %.0f%%' % bet)
+print()
 
 ev_high = ph * pmt_low  - (1-ph)*pmt_high
 ev_low  = pl * pmt_high - (1-pl)*pmt_low
@@ -51,5 +56,6 @@ ev_low  = pl * pmt_high - (1-pl)*pmt_low
 assert ev_high > 0
 assert ev_low > 0
 
-print('high ev:', ev_high)
-print('low ev:', ev_low)
+print('Expected values:')
+print("  high player expects: $%.2f" % ev_high)
+print('  low  player expects: $%.2f' % ev_low)
