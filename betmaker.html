@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>Betmaker</title>
+    <script>
+      function getId(id) { return document.getElementById(id); }
+      function render() {
+        var lowP = parseFloat(getId("low-percent").value) / 100;
+        var lowPValid = isFinite(lowP) && 0 < lowP && lowP < 1;
+        getId("low-percent").style["border"] = lowPValid ? '' : '1px solid red';
+
+        var highP = parseFloat(getId("high-percent").value) / 100;
+        var highPValid = isFinite(highP) && 0 < highP && highP < 1;
+        getId("high-percent").style["border"] = highPValid ? '' : '1px solid red';
+
+        var maxExposure = parseFloat(getId("max-exposure").value);
+        var maxExposureValid = isFinite(maxExposure) && 0 < maxExposure;
+        getId("max-exposure").style["border"] = maxExposureValid ? '' : '1px solid red';
+
+        if (!(lowPValid && highPValid && maxExposureValid)) return;
+
+        console.log({lowP, highP, maxExposure});
+      
+        var betP = (lowP + highP) / 2;
+        var payoutYNRatio = (1-betP) / betP;
+        var payoutNo = maxExposure * Math.min(1, 1/payoutYNRatio);
+        var payoutYes = payoutNo * payoutYNRatio;
+
+        getId("bet-percent").innerText = (betP * 100).toFixed(2);
+        getId("payout-no").innerText = payoutNo.toFixed(2);
+        getId("payout-yes").innerText = payoutYes.toFixed(2);
+        getId("evLow").innerText = `${(lowP*payoutNo + (1-lowP)*payoutYes).toFixed(1)} = ${lowP.toFixed(3)}*${payoutNo.toFixed(1)} + ${(1-lowP).toFixed(3)}*${payoutYes.toFixed(1)}`;
+        getId("evHigh").innerText = `${(highP*payoutYes + (1-highP)*payoutNo).toFixed(1)} = ${highP.toFixed(3)}*${payoutYes.toFixed(1)} + ${(1-highP).toFixed(3)}*${payoutNo.toFixed(1)}`;
+      }
+      window.addEventListener("load", () => {
+        console.log(document.getElementsByTagName("input"));
+        Array.from(document.getElementsByTagName("input")).forEach(e => {
+          e.addEventListener("input", render);
+          e.addEventListener("change", render);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    Low probability: <input id="low-percent" type="number")></input>% <br/>
+    High probability: <input id="high-percent" type="number")></input>% <br/>
+    Maximum exposure: $<input id="max-exposure" value="10" type="number"></input> <br/>
+    <br/>
+    <strong>If yes:</strong> low pays high <span id="payout-yes"></span><br/>
+    <strong>If no:</strong> high pays low <span id="payout-no"></span><br/>
+    (implied bet probability is <span id="bet-percent"></span>%) <br/>
+    <br/>
+    Expected winnings: <br/>
+    &nbsp;&nbsp;  <strong>Low:</strong> <span id="evLow"></span><br/>
+    &nbsp;&nbsp;  <strong>High:</strong> <span id="evHigh"></span><br/>
+    <br/>
+    
+  </body>
+</html>
